@@ -1,0 +1,46 @@
+# Nvim
+if [ -d ~/.config/nvim ]; then
+    export MANPAGER="nvim +Man!"
+    export EDITOR="/usr/bin/nvim"
+    alias vim='nvim'
+    alias vi='nvim'
+    alias nv='nvim'
+fi
+
+# nnn
+alias nnn='nnn -CdHiU'
+
+# ranger
+alias rr='ranger'
+
+# Blender
+if [ -d ~/Projects/blender-git ]; then
+    alias blender-release='~/Projects/blender-git/build_linux_release/bin/blender'
+    alias blender-full='~/Projects/blender-git/build_linux_full/bin/blender'
+    alias blender-lite='~/Projects/blender-git/build_linux_lite/bin/blender'
+fi
+
+# Python
+alias py-run-unittest='python -m unittest -vf --locals'
+alias py-run-autopep8='fd -e py --exec autopep8 -i'
+alias py-activate-venv='source .venv/bin/activate'
+alias py-create-venv='python -m venv .venv'
+
+# Various
+alias ll='ls -lah --color=auto'
+alias duh='du -hsc *'
+alias td='vim ~/Documents/todo.md'
+alias zt='zathura --mode fullscreen'
+alias deploy-gh-pages='~/soft/scr/deploy-gh-pages'
+
+# exa
+alias exa='exa -l --icons -a --numeric --group-directories-first -gh --git'
+# alias ll='exa'
+
+# Configs
+alias cfg-nvim='nvim ~/.config/nvim/'
+alias cfg-vifm='nvim ~/.config/vifm'
+alias cfg-ranger='nvim ~/.config/ranger'
+alias cfg-zsh='nvim ~/.config/zsh/.zshrc'
+alias cfg-plugins='nvim ~/.local/share/nvim/plugged'
+alias cfg-blender='cd ~/.config/blender/3.1/scripts/addons/bmtools'
