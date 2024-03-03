@@ -1,46 +1,150 @@
-# Nvim
-if [ -d ~/.config/nvim ]; then
+#!/usr/bin/env zsh
+
+# Set MANPAGER and (n)vi(m) shortcuts
+editor_to_use=vi
+if command -v nvim &> /dev/null; then
     export MANPAGER="nvim +Man!"
-    export EDITOR="/usr/bin/nvim"
-    alias vim='nvim'
-    alias vi='nvim'
-    alias nv='nvim'
+    editor_to_use="nvim"
+elif command -v vim &> /dev/null; then
+    editor_to_use="vim"
+elif command -v vi &> /dev/null; then
+    editor_to_use="vi"
 fi
 
-# nnn
-alias nnn='nnn -CdHiU'
+alias dvim="devour alacritty --config-file $HOME/.config/alacritty/alacritty-nopadding.yml -e zsh -c nvim"
+alias hvim="alacritty msg config window.opacity=1 && nvim"
+alias nvim="$editor_to_use"
+alias vim="$editor_to_use"
+alias vi="$editor_to_use"
+alias v="$editor_to_use"
+alias e="$editor_to_use"
 
-# ranger
-alias rr='ranger'
+configs=(
+~/.config/nvim
+~/.config/newsboat/urls.def
+~/.config/awesome/rc.lua
+~/.config/dunst/dunstrc
+~/.config/hypr/hyprland.conf
+~/.config/jgmenu/jgmenurc
+~/.config/jrnl/jrnl.yaml
+~/.config/kitty/kitty.conf
+~/.config/picom/picom.conf
+~/.config/mpv/mpv.conf
+~/.config/rofi/config.rasi
+~/.config/task/taskrc
+~/.config/tint2/tint2rc
+~/.config/vifm/vifmrc
+~/.config/zathura/zathurarc
+~/.config/shell/aliasrc
+~/.config/shell/profile
+~/.config/starship.toml
+~/.config/qtile
+~/.config/sxhkd/sxhkdrc
+~/.config/alacritty/alacritty.yml
+# ~/.config/alacritty/alacritty-nopadding.yml
+~/.config/redshift.conf
+~/.config/timetable_cli/config.py
+"$HOME/.config/sxiv/exec/key-handler"
+)
 
-# Blender
-if [ -d ~/Projects/blender-git ]; then
-    alias blender-release='~/Projects/blender-git/build_linux_release/bin/blender'
-    alias blender-full='~/Projects/blender-git/build_linux_full/bin/blender'
-    alias blender-lite='~/Projects/blender-git/build_linux_lite/bin/blender'
-fi
+for config in "${configs[@]}"
+do
+    if [ ! -e "$config" ]; then continue; fi
+    lhs="cf-$(basename "$config" | sed 's/\./_/g')"
+    rhs="$EDITOR $config"
+    alias "$lhs"="$rhs"
+done
+
+alias cfg-usrlocalbin='sudo vim /usr/local/bin'
 
 # Python
 alias py-run-unittest='python -m unittest -vf --locals'
-alias py-run-autopep8='fd -e py --exec autopep8 -i'
-alias py-activate-venv='source .venv/bin/activate'
-alias py-create-venv='python -m venv .venv'
 
 # Various
-alias ll='ls -lah --color=auto'
-alias duh='du -hsc *'
-alias td='vim ~/Documents/todo.md'
-alias zt='zathura --mode fullscreen'
-alias deploy-gh-pages='~/soft/scr/deploy-gh-pages'
-
-# exa
+alias lo='setsid libreoffice --nologo'
+alias nnn='nnn -CdHiU'
+alias ra='ranger'
+alias rd='. ranger'  # cd to last ranger dir
+alias sst='ss -tap'
+alias ll='ls -lh --almost-all --color=auto --sort=extension'
+alias ls='ls --color=auto --almost-all --sort=extension'
+alias f='ls -lah --color=auto'
+alias duh='du -hsc * | sort -h'  # du with dir size + sort
+alias df='df -h -t ext4'
+alias zt='devour zathura'
+alias oa='devour okular'
 alias exa='exa -l --icons -a --numeric --group-directories-first -gh --git'
-# alias ll='exa'
+alias neofetcher='neofetch --source ~/.config/neofetch/art.txt'
+alias pandoc='pandoc --sandbox --pdf-engine=xelatex'
+alias rga='rga --rga-adapters=+tesseract --rga-no-cache'
+alias jrnl-all='jrnl -to now'
+alias pk='pkill'
+alias pg='pgrep'
+alias c='cd'
+alias g='git'
+alias pac='pacman'
+# TODO: nvim lags a lot when loading mpv manual
+alias oldman='MANPAGER="less" man'
+alias note-date="vim \"$(date --rfc-3339=seconds).md\""
+alias duf='duf -hide special -hide-mp="/boot"'
+alias autoignore="autoignore --gitignore-dir $HOME/repos/template-gitignore"
+alias py="python"
+alias pandocpdfru='pandoc --sandbox -V mainfont="Noto Sans" --pdf-engine=xelatex'
+alias sk="task"
+alias mt="neomutt"
+alias yt="yt-dlp"
+alias ytm="yt-dlp --embed-metadata --format bestaudio"
+alias ytv="yt-dlp --embed-metadata"
+alias gd="git --git-dir=$HOME/.dots --work-tree=$HOME"
+alias lg="lazygit"
+alias dv="devour"
+alias sxiv="devour sxiv"
+alias sqlitebrowser="devour sqlitebrowser"
+alias fr="devour file-roller"
+alias rs="newsboat"
+alias rsu="$EDITOR ~/.config/newsboat/urls.def"
+alias th="devour thunar"
+alias thunar="devour thunar"
+alias rs-reload="newsboat -x reload"
+alias rn="rename"
+alias nc="ncmpcpp-wrapper"
+alias dtermdown="devour cool-retro-term -e termdown"
+alias op-alacritty="setsid alacritty"
+alias pgc="pass generate -c"
+alias pmx="pulsemixer"
+alias bo="borgmatic"
+alias bt='bluetoothctl'
+# alias nmcli='nmcli --pretty'
 
-# Configs
-alias cfg-nvim='nvim ~/.config/nvim/'
-alias cfg-vifm='nvim ~/.config/vifm'
-alias cfg-ranger='nvim ~/.config/ranger'
-alias cfg-zsh='nvim ~/.config/zsh/.zshrc'
-alias cfg-plugins='nvim ~/.local/share/nvim/plugged'
-alias cfg-blender='cd ~/.config/blender/3.1/scripts/addons/bmtools'
+alias lo="devour lo"
+alias lowriter="devour lowriter"
+alias localc="devour localc"
+alias loimpress="devour loimpress"
+alias lodraw="devour lodraw"
+
+# timetable-cli
+export TIMETABLE_CLI_DEFAULT_OPTIONS="--columns=start,eta,title,focus_type,status --add-empty-lines --watch-notification --watch-voice --watch-notify-eta='30m' --watch-interval 60 --clear-screen --combine-title-and-variation"
+alias tt="timetable-cli $TIMETABLE_CLI_DEFAULT_OPTIONS --list-categories"
+alias tta="timetable-cli $TIMETABLE_CLI_DEFAULT_OPTIONS --list-categories --default-activities-selectors='..' -A"
+alias ttw="timetable-cli -DSQARW $TIMETABLE_CLI_DEFAULT_OPTIONS --list-categories --default-activities-selectors='-3..5'"
+alias tti="timetable-cli $TIMETABLE_CLI_DEFAULT_OPTIONS --ignore-time-status --default-activities-selectors='..0' -I"
+alias ttt="timetable-cli $TIMETABLE_CLI_DEFAULT_OPTIONS --ignore-time-status --default-activities-selectors='..' --list-categories -d 1d -A"
+
+# Color
+alias grep='grep --color=auto'
+alias ip='ip -color=auto'
+alias diff='diff --color=auto'
+
+# arduino-cli
+alias ac='arduino-cli'
+
+
+# Vim-like exit
+alias q='exit'
+alias :q='exit'
+alias ZZ='exit'
+alias ZQ='exit'
+
+# git
+alias gclone="git clone --depth 1"
+

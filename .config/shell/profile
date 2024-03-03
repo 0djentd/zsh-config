@@ -1,9 +1,27 @@
-#!/bin/zsh
+#!/usr/env bash
 
-export EDITOR="nvim"
+if command -v nvim &> /dev/null; then 
+    export EDITOR="nvim"
+elif command -v vim &> /dev/null; then
+    export EDITOR="vim"
+else
+    export EDITOR="vi"
+fi
+
+if command -v brave &> /dev/null; then 
+    export BROWSER="brave"
+elif command -v firefox &> /dev/null; then
+    export BROWSER="firefox"
+elif command -v chromium &> /dev/null; then
+    export BROWSER="chromium"
+fi
+
 export TERMINAL="alacritty"
-export BROWSER="brave"
-# export BROWSER="firefox"
+
+# export SHELL="zsh"
+
+export WALLPAPERS_DIR="$HOME/pics/walls"
+
 
 # User specific environment
 if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
@@ -12,10 +30,12 @@ then
 fi
 export PATH
 
-# Cargo
-if [ -d ~/.cargo ]; then
-    export PATH="$PATH:$HOME/.cargo/bin"
-fi
+add_to_path="$HOME/.cargo/bin $HOME/.npm_g/bin $HOME/repos/soft/scripts/scripts $HOME/repos/soft/scripts-extra"
+for directory in $add_to_path; do
+    if [ -d "$directory" ]; then
+        export PATH="$PATH:$directory"
+    fi
+done
 
 # export XDG_DATA_DIRS
 export XDG_CONFIG_DIRS="/etc/xdg"
@@ -25,5 +45,47 @@ export XDG_DATA_HOME="$HOME/.local/share"
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_STATE_HOME="$HOME/.local/state"
 
-export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+# Dotfiles
+export SQLITE_HISTORY="$XDG_DATA_HOME/sqlite_history"
+export HISTFILE="$XDG_STATE_HOME/bash/history"
 export LESSHISTFILE="$XDG_CONFIG_HOME/.lesshst"
+export NODE_REPL_HISTORY="$XDG_DATA_HOME/node_repl_history"
+# export FZF_HISTFILE="$XDG_CONFIG_HOME/fzf/.history"
+export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
+export JUPYTER_CONFIG_DIR="$XDG_CONFIG_HOME/jupyter"
+# export PYTHONHISTFILE="$XDG_STATE_HOME/python/python_history"
+export COOKIECUTTER_CONFIG="$XDG_CONFIG_HOME/cookiecutter/cookiecutter_config.yaml"
+# export CRAWL_DIR="$XDG_DATA_HOME/crawl/"
+export NUGET_PACKAGES="$XDG_CACHE_HOME/NuGetPackages"
+export PYENV_ROOT="$XDG_DATA_HOME/pyenv"
+export GTK_RC_FILES="$XDG_CONFIG_HOME/gtk-1.0/gtkrc"
+export GTK2_RC_FILES="$XDG_CONFIG_HOME/gtk-2.0/gtkrc"
+export OMNISHARPHOME="$XDG_CONFIG_HOME/omnisharp"
+
+# DEFAULT ARGS
+export DJENTD_DMENU_ARGS=(-p "user:" -l 10 -nb "#121212" -sb "#525252" -fn "IBM Plex Mono:style=Italic:size=14")
+
+export RCLONE_PASSWORD_COMMAND="pass rclone.conf"
+
+# Input method
+# # IBUS
+# export GTK_IM_MODULE=ibus
+# export QT_IM_MODULE=ibus
+# export XIM_PROGRAM=ibus
+# export XMODIFIERS=@im=ibus
+# export GLFW_IM_MODULE=ibus  # for kitty terminal
+
+# FCITX
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XIM_PROGRAM=fcitx
+export XMODIFIERS=@im=fcitx
+export GLFW_IM_MODULE=fcitx  # for kitty terminal
+
+# NLTK data dir
+export NLTK_DATA="$HOME/.local/share/nltk_data"
+
+export PICO_SDK_PATH="/home/djentd/repos/hw/pico/pico-sdk"
+
+# telemetry optout
+export DOTNET_CLI_TELEMETRY_OPTOUT="1"
